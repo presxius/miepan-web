@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Status Pesanan{% endblock %}
+
+{% block content %}
+{% set active = 'status' %}
+{% include "admin/_nav.html" with context %}
+
+<h2>Status Pesanan</h2>
+
+<div class="menu-filter">
+    <a href="{{ url_for('admin.status_list') }}" class="{{ 'active' if not status_filter }}">Semua</a>
+    <a href="{{ url_for('admin.status_list', status='pending') }}" class="{{ 'active' if status_filter=='pending' }}">Pending</a>
+    <a href="{{ url_for('admin.status_list', status='diproses') }}" class="{{ 'active' if status_filter=='diproses' }}">Diproses</a>
+    <a href="{{ url_for('admin.status_list', status='sudah selesai') }}" class="{{ 'active' if status_filter=='sudah selesai' }}">Selesai</a>
+</div>
+
+<table>
+    <thead>
+        <tr><th>ID</th><th>Nama</th><th>Waktu</th><th>Status</th><th>Aksi</th></tr>
+    </thead>
+    <tbody>
+    {% for p in pesanan_semua %}
+        <tr>
+            <td>{{ p.id_pesanan }}</td>
+            <td>{{ p.nama_pemesan }}</td>
+            <td>{{ p.waktu_pesan.strftime('%d-%m-%Y %H:%M') }}</td>
+            <td>
+                {% if p.status_pesanan == 'pending' %}
+                <span class="badge badge-pending">Pending</span>
+                {% elif p.status_pesanan == 'diproses' %}
+                <span class="badge badge-diproses">Diproses</span>
+                {% else %}
+                <span class="badge badge-selesai">Selesai</span>
+                {% endif %}
+            </td>
+            <td>
+                <form class="inline" action="{{ url_for('admin.status_update', id_pesanan=p.id_pesanan) }}" method="post">
+                    <select name="status_pesanan" onchange="this.form.submit()">
+                        <option value="pending" {{ 'selected' if p.status_pesanan=='pending' }}>Pending</option>
+                        <option value="diproses" {{ 'selected' if p.status_pesanan=='diproses' }}>Diproses</option>
+                        <option value="sudah selesai" {{ 'selected' if p.status_pesanan=='sudah selesai' }}>Selesai</option>
+                    </select>
+                </form>
+            </td>
+        </tr>
+    {% else %}
+        <tr><td colspan="5">Belum ada pesanan.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

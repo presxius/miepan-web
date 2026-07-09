@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Riwayat Pesanan{% endblock %}
+
+{% block content %}
+<h2>Riwayat Pesanan Kamu</h2>
+
+{% if pesanan_list %}
+<div style="display:flex; flex-direction:column; gap:12px;">
+{% for pesanan in pesanan_list %}
+    <a href="{{ url_for('customer.status_page', id_pesanan=pesanan.id_pesanan) }}"
+       class="card" style="display:block; text-decoration:none; color:inherit;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+                <strong>#{{ pesanan.id_pesanan }}</strong>
+                <div style="color:#7a7a7a; font-size:0.85rem;">{{ pesanan.waktu_pesan.strftime('%d-%m-%Y %H:%M') }}</div>
+            </div>
+            {% if pesanan.status_pesanan == 'pending' %}
+            <span class="badge badge-pending">Pending</span>
+            {% elif pesanan.status_pesanan == 'diproses' %}
+            <span class="badge badge-diproses">Diproses</span>
+            {% else %}
+            <span class="badge badge-selesai">Selesai</span>
+            {% endif %}
+        </div>
+    </a>
+{% endfor %}
+</div>
+{% else %}
+<p>Belum ada riwayat pesanan di perangkat ini.</p>
+<a href="{{ url_for('customer.menu_list') }}" class="btn">Pesan Sekarang</a>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if menu else 'Tambah' }} Menu{% endblock %}
+
+{% block content %}
+{% set active = 'menu' %}
+{% include "admin/_nav.html" with context %}
+
+<h2>{{ 'Edit' if menu else 'Tambah' }} Menu</h2>
+
+<form method="post" enctype="multipart/form-data" class="card">
+    <div class="form-group">
+        <label for="nama_menu">Nama Menu</label>
+        <input type="text" id="nama_menu" name="nama_menu" value="{{ menu.nama_menu if menu else '' }}" required>
+    </div>
+    <div class="form-group">
+        <label for="deskripsi">Deskripsi</label>
+        <textarea id="deskripsi" name="deskripsi" rows="3">{{ menu.deskripsi if menu else '' }}</textarea>
+    </div>
+    <div class="form-group">
+        <label for="harga">Harga (Rp)</label>
+        <input type="number" id="harga" name="harga" value="{{ menu.harga if menu else '' }}" required min="0">
+    </div>
+    <div class="form-group">
+        <label for="kategori">Kategori</label>
+        <select id="kategori" name="kategori" required>
+            <option value="makanan" {{ 'selected' if menu and menu.kategori=='makanan' }}>Makanan</option>
+            <option value="minuman" {{ 'selected' if menu and menu.kategori=='minuman' }}>Minuman</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="status">Status</label>
+        <select id="status" name="status">
+            <option value="tersedia" {{ 'selected' if menu and menu.status=='tersedia' }}>Tersedia</option>
+            <option value="tidak tersedia" {{ 'selected' if menu and menu.status=='tidak tersedia' }}>Tidak Tersedia</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="gambar">Foto Menu {{ '(kosongkan jika tidak ganti)' if menu else '' }}</label>
+        <input type="file" id="gambar" name="gambar" accept=".png,.jpg,.jpeg,.webp">
+        {% if menu and menu.gambar %}
+        <img src="{{ url_for('static', filename='uploads/' + menu.gambar) }}" style="max-width:120px; margin-top:8px; border-radius:6px;">
+        {% endif %}
+    </div>
+    <button type="submit" class="btn btn-block">Simpan</button>
+</form>
+{% endblock %}

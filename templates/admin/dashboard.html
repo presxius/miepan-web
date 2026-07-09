@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+{% set active = 'dashboard' %}
+{% include "admin/_nav.html" with context %}
+
+<h2>Dashboard Penjualan</h2>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="num">{{ total_pesanan }}</div>
+        <div class="label">Total Pesanan</div>
+    </div>
+    <div class="stat-card">
+        <div class="num">Rp {{ '{:,.0f}'.format(total_penjualan).replace(',', '.') }}</div>
+        <div class="label">Total Penjualan</div>
+    </div>
+    <div class="stat-card">
+        <div class="num">{{ pesanan_pending }}</div>
+        <div class="label">Pending</div>
+    </div>
+    <div class="stat-card">
+        <div class="num">{{ pesanan_diproses }}</div>
+        <div class="label">Diproses</div>
+    </div>
+    <div class="stat-card">
+        <div class="num">{{ pesanan_selesai }}</div>
+        <div class="label">Selesai</div>
+    </div>
+</div>
+
+<h3>Menu Terlaris</h3>
+<table>
+    <thead><tr><th>Menu</th><th>Terjual</th></tr></thead>
+    <tbody>
+    {% for nama, terjual in menu_terlaris %}
+        <tr><td>{{ nama }}</td><td>{{ terjual }}</td></tr>
+    {% else %}
+        <tr><td colspan="2">Belum ada data.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

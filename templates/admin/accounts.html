@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Kelola Akun Admin{% endblock %}
+
+{% block content %}
+{% set active = 'accounts' %}
+{% include "admin/_nav.html" with context %}
+
+<h2>Kelola Akun Admin</h2>
+<a href="{{ url_for('admin.account_add') }}" class="btn" style="margin-bottom:16px; display:inline-block;">+ Tambah Akun</a>
+
+<table>
+    <thead>
+        <tr><th>Username</th><th>Nama Lengkap</th><th>Level</th><th>Aksi</th></tr>
+    </thead>
+    <tbody>
+    {% for a in accounts %}
+        <tr>
+            <td>{{ a.username }}</td>
+            <td>{{ a.nama_lengkap or '-' }}</td>
+            <td>{{ 'Superadmin' if a.akses_level=='kepala_admin' else 'Admin' }}</td>
+            <td>
+                <a href="{{ url_for('admin.account_edit', id_admin=a.id_admin) }}" class="btn btn-sm btn-outline">Edit</a>
+                {% if a.id_admin != current_user.id_admin %}
+                <form class="inline" action="{{ url_for('admin.account_delete', id_admin=a.id_admin) }}" method="post"
+                      onsubmit="return confirm('Yakin hapus akun ini?');">
+                    <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<h2>Checkout</h2>
+
+<div class="card">
+    <table>
+        <tbody>
+        {% for item in items %}
+            <tr>
+                <td>{{ item.menu.nama_menu }} x{{ item.qty }}</td>
+                <td>Rp {{ '{:,.0f}'.format(item.subtotal).replace(',', '.') }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <p style="margin-top:12px;"><strong>Total: Rp {{ '{:,.0f}'.format(total).replace(',', '.') }}</strong></p>
+</div>
+
+<form method="post" class="card" style="margin-top:16px;">
+    <div class="form-group">
+        <label for="nama_pemesan">Nama Pemesan</label>
+        <input type="text" name="nama_pemesan" id="nama_pemesan" required>
+    </div>
+    <button type="submit" class="btn btn-block">Pesan Sekarang</button>
+</form>
+{% endblock %}

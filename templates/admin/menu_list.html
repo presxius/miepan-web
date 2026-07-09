@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Kelola Menu{% endblock %}
+
+{% block content %}
+{% set active = 'menu' %}
+{% include "admin/_nav.html" with context %}
+
+<h2>Kelola Menu</h2>
+<a href="{{ url_for('admin.menu_add') }}" class="btn" style="margin-bottom:16px; display:inline-block;">+ Tambah Menu</a>
+
+<table>
+    <thead>
+        <tr><th>Nama</th><th>Kategori</th><th>Harga</th><th>Status</th><th>Aksi</th></tr>
+    </thead>
+    <tbody>
+    {% for menu in menus %}
+        <tr>
+            <td>{{ menu.nama_menu }}</td>
+            <td>{{ menu.kategori }}</td>
+            <td>Rp {{ '{:,.0f}'.format(menu.harga).replace(',', '.') }}</td>
+            <td>{{ menu.status }}</td>
+            <td>
+                <a href="{{ url_for('admin.menu_edit', id_menu=menu.id_menu) }}" class="btn btn-sm btn-outline">Edit</a>
+                <form class="inline" action="{{ url_for('admin.menu_delete', id_menu=menu.id_menu) }}" method="post"
+                      onsubmit="return confirm('Yakin hapus menu ini?');">
+                    <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                </form>
+            </td>
+        </tr>
+    {% else %}
+        <tr><td colspan="5">Belum ada menu.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

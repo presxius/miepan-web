@@ -1,0 +1,11 @@
+<nav class="admin-nav">
+    {% if current_user.is_superadmin %}
+    <a href="{{ url_for('admin.dashboard') }}" class="{{ 'active' if active=='dashboard' }}">Dashboard</a>
+    <a href="{{ url_for('admin.menu_list') }}" class="{{ 'active' if active=='menu' }}">Kelola Menu</a>
+    <a href="{{ url_for('admin.status_list') }}" class="{{ 'active' if active=='status' }}">Status Pesanan</a>
+    <a href="{{ url_for('admin.account_list') }}" class="{{ 'active' if active=='accounts' }}">Kelola Akun</a>
+    {% else %}
+    <a href="{{ url_for('admin.status_list') }}" class="{{ 'active' if active=='status' }}">Status Pesanan</a>
+    {% endif %}
+    <a href="{{ url_for('auth.logout') }}" style="margin-left:auto;">Logout ({{ current_user.username }})</a>
+</nav>

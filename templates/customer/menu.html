@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Menu - Miepan Bangladesh{% endblock %}
+
+{% block header_actions %}
+<a href="{{ url_for('customer.cek_status') }}" style="color:white; text-decoration:none; font-size:0.9rem; border:1px solid rgba(255,255,255,.6); padding:6px 14px; border-radius:20px;">
+    Cek Status Pesanan
+</a>
+{% endblock %}
+
+{% block content %}
+<h2>Menu Kami</h2>
+
+<div class="menu-filter">
+    <a href="{{ url_for('customer.menu_list') }}" class="{{ 'active' if not kategori_aktif }}">Semua</a>
+    <a href="{{ url_for('customer.menu_list', kategori='makanan') }}" class="{{ 'active' if kategori_aktif=='makanan' }}">Makanan</a>
+    <a href="{{ url_for('customer.menu_list', kategori='minuman') }}" class="{{ 'active' if kategori_aktif=='minuman' }}">Minuman</a>
+</div>
+
+<div class="menu-grid">
+    {% for menu in menus %}
+    <div class="menu-card">
+        {% if menu.gambar %}
+        <img src="{{ url_for('static', filename='uploads/' + menu.gambar) }}" alt="{{ menu.nama_menu }}">
+        {% else %}
+        <img src="https://placehold.co/300x140?text=No+Image" alt="no image">
+        {% endif %}
+        <div class="menu-card-body">
+            <h3>{{ menu.nama_menu }}</h3>
+            <div class="desk">{{ menu.deskripsi or '' }}</div>
+            <div class="harga">Rp {{ '{:,.0f}'.format(menu.harga).replace(',', '.') }}</div>
+            <form action="{{ url_for('customer.cart_add', id_menu=menu.id_menu) }}" method="post">
+                <button type="submit" class="btn btn-block">+ Keranjang</button>
+            </form>
+        </div>
+    </div>
+    {% else %}
+    <p>Belum ada menu tersedia.</p>
+    {% endfor %}
+</div>
+
+<a href="{{ url_for('customer.cart_view') }}" class="cart-fab">🛒 Keranjang ({{ cart_count }})</a>
+{% endblock %}

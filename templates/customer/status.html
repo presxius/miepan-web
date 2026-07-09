@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Status Pesanan{% endblock %}
+
+{% block content %}
+<h2>Status Pesanan #{{ pesanan.id_pesanan }}</h2>
+
+<div class="card">
+    <p><strong>Nama:</strong> {{ pesanan.nama_pemesan }}</p>
+    <p><strong>Waktu Pesan:</strong> {{ pesanan.waktu_pesan.strftime('%d-%m-%Y %H:%M') }}</p>
+    <p><strong>Status:</strong>
+        {% if pesanan.status_pesanan == 'pending' %}
+        <span class="badge badge-pending">Pending</span>
+        {% elif pesanan.status_pesanan == 'diproses' %}
+        <span class="badge badge-diproses">Diproses</span>
+        {% else %}
+        <span class="badge badge-selesai">Sudah Selesai</span>
+        {% endif %}
+    </p>
+
+    <table style="margin-top:14px;">
+        <thead><tr><th>Menu</th><th>Qty</th><th>Subtotal</th></tr></thead>
+        <tbody>
+        {% for d in pesanan.details %}
+            <tr>
+                <td>{{ d.menu.nama_menu }}</td>
+                <td>{{ d.jumlah_pesanan }}</td>
+                <td>Rp {{ '{:,.0f}'.format(d.total_harga).replace(',', '.') }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<p style="margin-top:12px; color:#7a7a7a; font-size:0.85rem;">
+    Simpan link ini buat cek status pesanan kapan aja. Refresh halaman buat update terbaru.
+</p>
+<a href="{{ url_for('customer.menu_list') }}" class="btn">Pesan Lagi</a>
+{% endblock %}
